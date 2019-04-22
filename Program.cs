@@ -18,13 +18,13 @@ namespace CaixaEletronico
                 {
                     try
                     {
-                        if (opcao == "s")
+                        if (opcao.ToLower() == "s")
                             Sacar(Caixa);
-                        else if (opcao == "n")
+                        else if (opcao.ToLower() == "n")
                             MotarNotasDisponiveis(Caixa);
-                        else if (opcao == "r")
+                        else if (opcao.ToLower() == "r")
                             CarregarCaixaEletronico(Caixa);
-                        else if (opcao == "f")
+                        else if (opcao.ToLower() == "f")
                             break;
                     }
                     catch (Exception ex)
@@ -92,10 +92,10 @@ namespace CaixaEletronico
         private static void CarregarCaixaEletronico(CaixaEletronico Caixa)
         {
             Caixa.Descarregar();
-            Caixa.Carregar(10, 0);
-            Caixa.Carregar(20, 100);
-            Caixa.Carregar(50, 100);
-            Caixa.Carregar(100, 100);
+            Caixa.Carregar(10, 1);
+            Caixa.Carregar(20, 3);
+            Caixa.Carregar(50, 5);
+            Caixa.Carregar(100, 7);
         }
     }
 }
