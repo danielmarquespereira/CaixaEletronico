@@ -40,13 +40,13 @@ namespace CaixaEletronico
             if (valorSaque > 0)
             {
                 //Se distribuição simples não funcionou, tentar recursiva
-                int primeiraNota = this.NotasDisponiveis.Where(n=>n.Value>0).OrderBy(c => c.Key).Select(n => n.Key).FirstOrDefault();
+                int primeiraNota = this.NotasDisponiveis.Where(n => n.Value > 0).OrderBy(c => c.Key).Select(n => n.Key).FirstOrDefault();
                 List<SortedList<int, int>> DistribuicoesCompletas = new List<SortedList<int, int>>();
                 DistribuirNotasRecursiva(valorSaqueTotal, primeiraNota, NotasCopia, DistribuicoesCompletas);
-                
+
                 //Pegar Distribuição com Menos Notas
                 NotasDistribuidas = DistribuicoesCompletas.OrderBy(dc => dc.Sum(nd => nd.Value)).FirstOrDefault();
-                if (NotasDistribuidas!=null) valorSaque = 0;
+                if (NotasDistribuidas != null) valorSaque = 0;
             }
             if (valorSaque == 0)
             {
@@ -124,21 +124,20 @@ namespace CaixaEletronico
             IDictionary<int, int> NotasCopia = new Dictionary<int, int>();
             NotasOriginal.ToList().ForEach(n => NotasCopia.Add(n));
             int quantidadeOriginal = NotasOriginal.Where(n => n.Key == nota).Select(n => n.Value).FirstOrDefault();
-            for (int i = 0;  i <= quantidadeOriginal; i++)
+            for (int i = 0; i <= quantidadeOriginal; i++)
             {
-                NotasCopia[nota] = quantidadeOriginal-i;
+                NotasCopia[nota] = quantidadeOriginal - i;
 
                 SortedList<int, int> NotasDistribuidas = new SortedList<int, int>();
                 int valorSaqueIteracao = DistribuirNotas(valorSaque, NotasDistribuidas, NotasCopia);
-                if (valorSaqueIteracao==0)
+                if (valorSaqueIteracao == 0)
                 {
                     DistribuicoesCompletas.Add(NotasDistribuidas);
                 }
-                
-                foreach (KeyValuePair<int, int> proximaNota in NotasOriginal.OrderBy(c => c.Key).Where(n => n.Key > nota))
-                {
-                    if (proximaNota.Key > 0) DistribuirNotasRecursiva(valorSaque, proximaNota.Key, NotasCopia, DistribuicoesCompletas);
-                }
+
+                KeyValuePair<int, int> proximaNota = NotasOriginal.OrderBy(c => c.Key).Where(n => n.Key > nota).FirstOrDefault();
+                if (proximaNota.Key > 0) DistribuirNotasRecursiva(valorSaque, proximaNota.Key, NotasCopia, DistribuicoesCompletas);
+
             }
             return;
         }
